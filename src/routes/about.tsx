@@ -1,17 +1,16 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import { Target, Heart, Users, Sparkles, ArrowRight } from "lucide-react";
 
-export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About Shoply — Our Story" },
-      { name: "description", content: "Learn about Shoply's mission, values and services." },
-    ],
-  }),
-  component: AboutPage,
-});
+export default function AboutPage() {
+  useEffect(() => {
+    document.title = "About Shoply — Our Story";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Learn about Shoply's mission, values and services.");
+    }
+  }, []);
 
-function AboutPage() {
   return (
     <div>
       <section className="bg-gradient-to-br from-primary-soft to-background">

@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, NavLink } from "react-router-dom";
 import { Search, ShoppingCart, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/lib/cart";
@@ -6,7 +6,7 @@ import { useCart } from "@/lib/cart";
 const nav = [
   { to: "/", label: "Home" },
   { to: "/products", label: "Products" },
-  { to: "/products", label: "Categories", search: { categories: true } },
+  { to: "/products", label: "Categories" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ] as const;
@@ -27,15 +27,18 @@ export function Header() {
 
         <nav className="hidden lg:flex items-center gap-1 ml-4">
           {nav.map((n) => (
-            <Link
+            <NavLink
               key={n.label}
               to={n.to}
-              className="px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-primary-soft hover:text-primary transition-colors"
-              activeProps={{ className: "text-primary" }}
-              activeOptions={{ exact: n.to === "/" }}
+              className={({ isActive }) =>
+                `px-3 py-2 text-sm font-medium rounded-md hover:bg-primary-soft hover:text-primary transition-colors ${
+                  isActive ? "text-primary font-semibold" : "text-muted-foreground"
+                }`
+              }
+              end={n.to === "/"}
             >
               {n.label}
-            </Link>
+            </NavLink>
           ))}
         </nav>
 

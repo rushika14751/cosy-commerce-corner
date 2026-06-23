@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { Star, ShoppingCart } from "lucide-react";
 import type { Product } from "@/lib/products";
 import { useCart } from "@/lib/cart";
@@ -8,8 +8,7 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <div className="card-soft card-soft-hover group overflow-hidden flex flex-col">
       <Link
-        to="/products/$id"
-        params={{ id: product.id }}
+        to={`/products/${product.id}`}
         className="relative block aspect-square overflow-hidden bg-secondary"
       >
         <img
@@ -29,8 +28,7 @@ export function ProductCard({ product }: { product: Product }) {
           {product.category}
         </div>
         <Link
-          to="/products/$id"
-          params={{ id: product.id }}
+          to={`/products/${product.id}`}
           className="mt-1 line-clamp-2 font-semibold hover:text-primary transition-colors min-h-[3rem]"
         >
           {product.name}

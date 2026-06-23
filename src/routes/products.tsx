@@ -1,22 +1,19 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import { products, categories } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 
-export const Route = createFileRoute("/products")({
-  head: () => ({
-    meta: [
-      { title: "Products — Shoply" },
-      { name: "description", content: "Browse all products on Shoply with filters and sorting." },
-    ],
-  }),
-  component: ProductsPage,
-});
-
 type Sort = "popularity" | "price-asc" | "price-desc";
 
-function ProductsPage() {
+export default function ProductsPage() {
+  useEffect(() => {
+    document.title = "Products — Shoply";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Browse all products on Shoply with filters and sorting.");
+    }
+  }, []);
+
   const [cat, setCat] = useState<string>("All");
   const [maxPrice, setMaxPrice] = useState<number>(300);
   const [sort, setSort] = useState<Sort>("popularity");

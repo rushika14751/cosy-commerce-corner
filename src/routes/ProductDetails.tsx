@@ -1,49 +1,45 @@
-import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Star, Minus, Plus, ShoppingCart, Zap, ShieldCheck, Truck, RefreshCw } from "lucide-react";
 import { getProduct, products } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart } from "@/lib/cart";
 
-export const Route = createFileRoute("/products/$id")({
-  loader: ({ params }) => {
-    const product = getProduct(params.id);
-    if (!product) throw notFound();
-    return { product };
-  },
-  head: ({ loaderData }) => ({
-    meta: loaderData
-      ? [
-          { title: `${loaderData.product.name} — Shoply` },
-          { name: "description", content: loaderData.product.description },
-          { property: "og:title", content: loaderData.product.name },
-          { property: "og:description", content: loaderData.product.description },
-          { property: "og:image", content: loaderData.product.image },
-        ]
-      : [{ title: "Product — Shoply" }],
-  }),
-  notFoundComponent: () => (
-    <div className="mx-auto max-w-2xl px-4 py-24 text-center">
-      <h1 className="text-2xl font-bold">Product not found</h1>
-      <Link to="/products" className="mt-4 inline-block text-primary hover:underline">
-        Back to products
-      </Link>
-    </div>
-  ),
-  component: ProductDetails,
-});
-
-function ProductDetails() {
-  const { product } = Route.useLoaderData();
+export default function ProductDetails() {
+  const { id } = useParams<{ id: string }>();
+  const product = id ? getProduct(id) : undefined;
   const { add } = useCart();
   const navigate = useNavigate();
   const [qty, setQty] = useState(1);
+
+  useEffect(() => {
+    if (product) {
+      document.title = `${product.name} — Shoply`;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute("content", product.description);
+      }
+    } else {
+      document.title = "Product — Shoply";
+    }
+  }, [product]);
+
+  if (!product) {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-24 text-center">
+        <h1 className="text-2xl font-bold">Product not found</h1>
+        <Link to="/products" className="mt-4 inline-block text-primary hover:underline">
+          Back to products
+        </Link>
+      </div>
+    );
+  }
 
   const related = products.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4);
 
   const buyNow = () => {
     add(product, qty);
-    navigate({ to: "/cart" });
+    navigate("/cart");
   };
 
   return (

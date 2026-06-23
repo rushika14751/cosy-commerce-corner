@@ -1,18 +1,15 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
 
-export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact — Shoply" },
-      { name: "description", content: "Get in touch with the Shoply team." },
-    ],
-  }),
-  component: ContactPage,
-});
+export default function ContactPage() {
+  useEffect(() => {
+    document.title = "Contact — Shoply";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Get in touch with the Shoply team.");
+    }
+  }, []);
 
-function ContactPage() {
   const [sent, setSent] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
 

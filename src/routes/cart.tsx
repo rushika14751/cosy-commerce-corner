@@ -1,18 +1,16 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import { Minus, Plus, Trash2, ArrowRight, ShoppingBag } from "lucide-react";
 import { useCart } from "@/lib/cart";
 
-export const Route = createFileRoute("/cart")({
-  head: () => ({
-    meta: [
-      { title: "Your Cart — Shoply" },
-      { name: "description", content: "Review your selected items and proceed to checkout." },
-    ],
-  }),
-  component: CartPage,
-});
-
-function CartPage() {
+export default function CartPage() {
+  useEffect(() => {
+    document.title = "Your Cart — Shoply";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Review your selected items and proceed to checkout.");
+    }
+  }, []);
   const { items, setQty, remove, total, clear } = useCart();
   const shipping = total > 50 || total === 0 ? 0 : 6.99;
   const tax = total * 0.08;
@@ -45,7 +43,7 @@ function CartPage() {
         <div className="space-y-4">
           {items.map(({ product, qty }) => (
             <div key={product.id} className="card-soft p-4 grid grid-cols-[80px_minmax(0,1fr)_auto] sm:grid-cols-[100px_minmax(0,1fr)_auto] gap-4 items-center">
-              <Link to="/products/$id" params={{ id: product.id }} className="block">
+              <Link to={`/products/${product.id}`} className="block">
                 <div className="aspect-square overflow-hidden rounded-xl bg-secondary">
                   <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
                 </div>
@@ -53,8 +51,7 @@ function CartPage() {
               <div className="min-w-0">
                 <div className="text-xs text-muted-foreground">{product.category}</div>
                 <Link
-                  to="/products/$id"
-                  params={{ id: product.id }}
+                  to={`/products/${product.id}`}
                   className="block font-semibold truncate hover:text-primary"
                 >
                   {product.name}

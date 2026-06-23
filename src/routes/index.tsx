@@ -1,21 +1,20 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import { ArrowRight, Truck, ShieldCheck, RefreshCw, Sparkles, Laptop, Shirt, Footprints, BookOpen, Watch } from "lucide-react";
 import { products, categories } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Shoply — Shop Smarter. Live Better." },
-      { name: "description", content: "Discover curated electronics, fashion, shoes, books and accessories." },
-    ],
-  }),
-  component: Home,
-});
-
 const iconMap = { Laptop, Shirt, Footprints, BookOpen, Watch } as const;
 
-function Home() {
+export default function Home() {
+  useEffect(() => {
+    document.title = "Shoply — Shop Smarter. Live Better.";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Discover curated electronics, fashion, shoes, books and accessories.");
+    }
+  }, []);
+
   const featured = products.slice(0, 8);
 
   return (
